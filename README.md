@@ -1,6 +1,7 @@
 # Characterizing the effect of retractions on scientific careers
 
-[![DOI](https://zenodo.org/badge/630590816.svg)](https://zenodo.org/badge/latestdoi/630590816)
+[![DOI](https://zenodo.org/badge/634166007.svg)](https://zenodo.org/badge/latestdoi/634166007)
+
 
 This repository contains data and code created for the study on "Characterizing the effect of retractions on scientific careers."
 
