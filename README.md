@@ -7,5 +7,7 @@ This repository contains data and code created for the study on "Characterizing 
 
 ## Contributors
 - [Shahan Ali Memon](samemon@uw.edu)
-- [Kinga R. Makovi](km2537@nyu.edu)
-- [Bedoor AlShebli](bedoor@nyu.edu)
+
+## Acknowledgements
+I express my sincere gratitude to my advisors, [Kinga R. Makovi](km2537@nyu.edu) and [Bedoor AlShebli](bedoor@nyu.edu), whose insightful guidance and mentorship have been invaluable throughout the course of this project. Their expertise and support have played a pivotal role in shaping and enriching my academic journey.
+
