@@ -4,52 +4,51 @@ import pandas as pd
 import configparser
 import os
 
-# Load configuration
-config = configparser.ConfigParser()
-config.read('config.ini')
+def read_config():
+    config = configparser.ConfigParser()
+    config.read('preprocessing_config.ini')
+    return config['Paths']
 
-OUTDIR = config['Paths']['OUTDIR']
-RW_CSV_PATH = config['Paths']['RW_CSV_PATH']
-MAG_RW_CSV_PATH = config['Paths']['MAG_RW_CSV_PATH']
-OA_CSV_PATH = config['Paths']['OA_CSV_PATH']
+def read_csv(file_path, columns):
+    # reading only relevant columns
+    return pd.read_csv(file_path, usecols=columns).drop_duplicates()
 
-# Let us first read the original RW dataset
-df_rw = pd.read_csv(RW_CSV_PATH, usecols=['Record ID','OriginalPaperDOI',
-                                        'OriginalPaperPubMedID'])\
-        .drop_duplicates()
-                        
-# Reading the mag merged RW dataset
-df_mag_rw = pd.read_csv(MAG_RW_CSV_PATH, usecols=['Record ID', 'MAGPID'])\
-                .drop_duplicates()
+def fix_pmid_column(df):
+    # fixing pmid to remove leading url and retain just the id (to merge)
+    df.loc[:, 'pmid'] = df['pmid'].str.split("/").str[-1]
 
-# merging the two but retaining the original (merge left)
-df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')
+def main():
+    # reading all the relevant paths
+    paths = read_config()
+    OUTDIR = paths['OUTDIR']
+    RW_CSV_PATH = paths['RW_CSV_PATH']
+    MAG_RW_CSV_PATH = paths['MAG_RW_CSV_PATH']
+    OA_CSV_PATH = paths['OA_CSV_PATH']
 
-# Reading open alex (dropping openalex as it is duplicate column)                        
-df_oa = pd.read_csv(OA_CSV_PATH, compression="gzip")\
-        .drop(columns=['openalex'])
-# Fixing OA's pmid column for easy merging
-df_oa['pmid'] = df_oa['pmid'].str.split("/").str[-1]
+    # Read datasets
+    df_rw = read_csv(RW_CSV_PATH, ['Record ID', 'OriginalPaperDOI', 'OriginalPaperPubMedID'])
+    df_mag_rw = read_csv(MAG_RW_CSV_PATH, ['Record ID', 'MAGPID'])
+    df_oa = read_csv(OA_CSV_PATH, None)  # Read all columns for now
 
-# Extracting dois from RW (those that are available)
-dois_rw = df_mag_rw[~df_mag_rw['OriginalPaperDOI'].isin(['unavailable','Unavailable']) &
-                ~df_mag_rw['OriginalPaperDOI'].isna()]\
-                ['OriginalPaperDOI'].unique()
-                
-# Extracing pub-med-ids (those that are available)   
-pmids_rw = df_mag_rw[~df_mag_rw['OriginalPaperPubMedID'].eq(0) & 
-                ~df_mag_rw['OriginalPaperPubMedID'].isna()]\
-                ['OriginalPaperPubMedID'].unique()
+    # Merge datasets to retain all 3 possible ids
+    df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')
 
-# Extracing mag-ids (those that were merged)
-magids_rw = df_mag_rw[~df_mag_rw['MAGPID'].isna()]['MAGPID'].unique()
+    # Data processing
+    fix_pmid_column(df_oa)
 
-# filtering the openalex dataset
-df_oa = df_oa[df_oa['doi'].isin(dois_rw) | df_oa['pmid'].isin(pmids_rw) | df_oa['mag'].isin(magids_rw)]
+    # extracting all kinds of relevant IDs
+    dois_rw = df_mag_rw[~df_mag_rw['OriginalPaperDOI'].isin(['unavailable', 'Unavailable']) & ~df_mag_rw['OriginalPaperDOI'].isna()]['OriginalPaperDOI'].unique()
+    pmids_rw = df_mag_rw[~df_mag_rw['OriginalPaperPubMedID'].eq(0) & ~df_mag_rw['OriginalPaperPubMedID'].isna()]['OriginalPaperPubMedID'].unique()
+    magids_rw = df_mag_rw[~df_mag_rw['MAGPID'].isna()]['MAGPID'].unique()
 
-# saving the relevant OA
-df_oa.to_csv(os.path.join(OUTDIR, "works_ids_RW_MAG_OA_merged_sample_BasedOndoi_ORpmid_ORmag.csv"), 
-                index=False)
+    # only extracting those rows that are relevant in terms of retracted papers
+    df_oa = df_oa.loc[df_oa['doi'].isin(dois_rw) | df_oa['pmid'].isin(pmids_rw) | df_oa['mag'].isin(magids_rw), :]
 
-# Printing number of work ids after filtering based on RW
-print("Number of merged RW-MAG-OA ids based on doi/pmid/mag:", df_oa['work_id'].nunique())
+    # Save the relevant data
+    df_oa.to_csv(os.path.join(OUTDIR, "works_ids_RW_MAG_OA_merged_sample_BasedOndoi_ORpmid_ORmag.csv"), index=False)
+
+    # Print results
+    print("Number of merged RW-MAG-OA ids based on doi/pmid/mag:", df_oa['work_id'].nunique())
+
+if __name__ == "__main__":
+    main()
