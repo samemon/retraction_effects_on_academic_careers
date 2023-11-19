@@ -5,6 +5,7 @@ import configparser
 import os
 
 def read_config():
+    # preprocessing the config file
     config = configparser.ConfigParser()
     config.read('preprocessing_config.ini')
     return config['Paths']
@@ -23,12 +24,12 @@ def main():
     OUTDIR = paths['OUTDIR']
     RW_CSV_PATH = paths['RW_CSV_PATH']
     MAG_RW_CSV_PATH = paths['MAG_RW_CSV_PATH']
-    OA_CSV_PATH = paths['OA_CSV_PATH']
+    OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
 
     # Read datasets
     df_rw = read_csv(RW_CSV_PATH, ['Record ID', 'OriginalPaperDOI', 'OriginalPaperPubMedID'])
     df_mag_rw = read_csv(MAG_RW_CSV_PATH, ['Record ID', 'MAGPID'])
-    df_oa = read_csv(OA_CSV_PATH, None)  # Read all columns for now
+    df_oa = read_csv(OA_WORKS_IDS_PATH, None)  # Read all columns for now
 
     # Merge datasets to retain all 3 possible ids
     df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')

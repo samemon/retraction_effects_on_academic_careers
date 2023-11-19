@@ -1,21 +1,38 @@
 #!/usr/bin/env python
 
 import pandas as pd
+import configparser
+import os
 
-OUTDIR = "/scratch/sm9654/retraction_openalex/data/processed/"
+def read_config():
+    # preprocessing the config file
+    config = configparser.ConfigParser()
+    config.read('preprocessing_config.ini')
+    return config['Paths']
 
-# Reading the RW MAG merged file from openAlex
-df_oa_rw = pd.read_csv(OUTDIR+"works_ids_RW_MAG_OA_merged_sample_BasedOndoi_ORpmid_ORmag.csv")
+def main():
+    # reading all the relevant paths
+    paths = read_config()
+    OUTDIR = paths['OUTDIR']
+    OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
+    
+    # reading the RW MAG merged file from openAlex
+    df_oa_rw = pd.read_csv(os.path.join(OUTDIR, "works_ids_RW_MAG_OA_merged_sample_BasedOndoi_ORpmid_ORmag.csv"))
 
-# Reading open alex works authorships file
-df_oa_authors = pd.read_csv("/scratch/sm9654/openalex_snapshot_oct2023/csv-files/works_authorships.csv.gz")
+    # Reading open alex works authorships file
+    df_oa_authors = pd.read_csv(OA_WORKS_AUTHORSHIPS_PATH)
 
-# extracting relevant work ids
-oa_work_ids = df_oa_rw['work_id'].unique()
+    # Extracting relevant work ids
+    oa_work_ids = df_oa_rw['work_id'].unique()
 
-# Only extracting authors from relevant rw works
-df_oa_rw_authors = df_oa_authors[df_oa_authors['work_id'].isin(oa_work_ids)]
+    # Only extracting authors from relevant rw works
+    df_oa_rw_authors = df_oa_authors[df_oa_authors['work_id'].isin(oa_work_ids)]
 
-df_oa_rw_authors.to_csv(OUTDIR+"authors_ids_RW_MAG_OA.csv", index=False)
+    # Save the relevant data
+    df_oa_rw_authors.to_csv(os.path.join(OUTDIR, "authors_ids_RW_MAG_OA.csv"), index=False)
 
-print("Number of RW-MAG-OA authors:", df_oa_rw_authors['author_id'].nunique())
+    # Print results
+    print("Number of RW-MAG-OA authors:", df_oa_rw_authors['author_id'].nunique())
+
+if __name__ == "__main__":
+    main()
