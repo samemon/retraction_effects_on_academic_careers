@@ -1,5 +1,18 @@
 #!/usr/bin/env python
 
+"""
+Summary:
+The Python program is designed to extract work_id information 
+for papers listed on Retraction Watch by merging data from 
+Retraction Watch and OpenAlex database. 
+The program utilizes three key identifiers-
+DOI (Digital Object Identifier), 
+PubMedID, and 
+MAG ID (Microsoft Academic Graph ID)—
+to match and consolidate information from both sources.
+"""
+
+
 import pandas as pd
 import configparser
 import os

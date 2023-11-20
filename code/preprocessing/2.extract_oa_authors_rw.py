@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+"""
+Summary:
+This Python program will extract author information 
+for authors of retracted papers listed in OpenAlex. 
+"""
+
+
 import pandas as pd
 import configparser
 import os

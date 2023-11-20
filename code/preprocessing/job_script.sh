@@ -13,5 +13,5 @@
 #SBATCH --mail-user=sm9654@nyu.edu
 
 #srun $(head -n $SLURM_ARRAY_TASK_ID jobs2.txt | tail -n 1)
-python3 extract_oa_works_rw.py
-#python3 extract_oa_authors_rw.py
+#python3 1.extract_oa_works_rw.py
+#python3 2.extract_oa_authors_rw.py

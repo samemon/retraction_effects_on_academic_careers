@@ -1,9 +1,9 @@
-# Characterizing the effect of retractions on scientific careers
+# Characterizing the effect of retractions on scientific publishing careers
 
 [![DOI](https://zenodo.org/badge/634166007.svg)](https://zenodo.org/badge/latestdoi/634166007)
 
 
-This repository contains data and code created for the study on "Characterizing the effect of retractions on scientific careers."
+This repository contains data and code created for the study on "Characterizing the effect of retractions on scientific publihsing careers."
 
 ## Contributors
 - [Shahan Ali Memon](samemon@uw.edu)
