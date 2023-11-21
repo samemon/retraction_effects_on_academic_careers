@@ -58,32 +58,57 @@ def main():
                     .drop_duplicates()
                     
     # extracting works for retracted authors
-    lst_works_for_retracted_authors = df_oa_works_authorships['work_id'].unique()
+    set_works_for_retracted_authors = df_oa_works_authorships['work_id'].unique()
     
     # filtering works to only include works of retracted authors
-    df_oa_works = df_oa_works[df_oa_works['work_id'].isin(lst_works_for_retracted_authors)]
+    df_oa_works = df_oa_works[df_oa_works['work_id'].isin(set_works_for_retracted_authors)]
     
     # merging works and authors
     # This dataframe will have  author_id, work_id, title, publication_year
-    df_oa_authors_works_retracted = df_oa_works_authorships.merge(df_oa_works,
+    df_oa_retracted_authors_works = df_oa_works_authorships.merge(df_oa_works,
                                                     on='work_id')\
                                                     .drop_duplicates()
     
     # let us clean up some memory
     del df_oa_works
     del df_oa_works_authorships
-    del lst_works_for_retracted_authors
     gc.collect()
     
-    # now we will extract information about sources
+    # now we will extract source id information about openalex works for RW authors
     df_oa_works_sources = pd.read_csv(OA_WORKS_PRIMARY_LOCATIONS_PATH,
                                     usecols=['work_id', 'source_id'])\
                                     .drop_duplicates()
     
-    # reading sources
-    df_oa_sources = pd.read_csv(OA_SOURCES_PATH, 
-                                usecols=['id', 'display_name', 'type'])
+    # filtering work-sources to remove works that are irrelevant
+    df_oa_works_sources = df_oa_works_sources[df_oa_works_sources['work_id'].isin(set_works_for_retracted_authors)]
     
+    # reading openalex sources
+    df_oa_sources = pd.read_csv(OA_SOURCES_PATH, 
+                                usecols=['id', 'display_name', 'type'])\
+                                .rename(columns={'id':'source_id',
+                                                'display_name': 'source_name',
+                                                'type': 'source_type'})\
+                                .drop_duplicates()
+    
+    
+    # merging to augment more info about sources
+    # this dataframe has following cols: work_id, source_id, source_name, source_type
+    df_oa_works_sources = df_oa_works_sources.merge(df_oa_sources, on='source_id',
+                                                    how='left')
+    
+    # finally let us merge this info with the retracted authors works
+    df_oa_retracted_authors_works_sources = df_oa_retracted_authors_works.merge(df_oa_works_sources,
+                                                                                on='work_id',
+                                                                                how='left')
+    
+    # saving the file
+    df_oa_retracted_authors_works_sources.to_csv(os.path.join(OUTDIR, "all_OA_works_authorship_sources_forRetractedAuthors.csv"),
+                                                            index=False)
+
+    # printing for sanity checks
+    print("Number of retracted authors:", df_oa_retracted_authors_works_sources['author_id'].nunique(),
+        "Total number of works", df_oa_retracted_authors_works_sources['work_id'].nunique(),
+        "Columns: ", df_oa_retracted_authors_works_sources.columns)
 
 if __name__ == "__main__":
     main()
