@@ -20,7 +20,7 @@ def read_config():
 def main():
     # reading all the relevant paths
     paths = read_config()
-    OUTDIR = paths['OUTDIR']
+    OUTDIR = paths['OUTDIR_PATH']
     OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
     
     # reading the RW MAG merged file from openAlex

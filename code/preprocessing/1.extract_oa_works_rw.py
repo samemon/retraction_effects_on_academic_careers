@@ -34,7 +34,7 @@ def fix_pmid_column(df):
 def main():
     # reading all the relevant paths
     paths = read_config()
-    OUTDIR = paths['OUTDIR']
+    OUTDIR = paths['OUTDIR_PATH']
     RW_CSV_PATH = paths['RW_CSV_PATH']
     MAG_RW_CSV_PATH = paths['MAG_RW_CSV_PATH']
     OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
