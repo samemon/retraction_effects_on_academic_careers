@@ -26,6 +26,8 @@ def main():
     OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
     # path to works file from open alex
     OA_WORKS_PATH = paths['OA_WORKS_PATH']
+    # path to works with ids (doi, pmid, mag)
+    OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
     # path to work ids and their source (venue) ids.
     OA_WORKS_PRIMARY_LOCATIONS_PATH = paths['OA_WORKS_PRIMARY_LOCATIONS_PATH']
     # path to source/venues and their info
@@ -90,14 +92,26 @@ def main():
     df_oa_works_sources = df_oa_works_sources.merge(df_oa_sources, on='source_id',
                                                     how='left')
     
-    # finally let us merge this info with the retracted authors works
+    # let us merge this info with the retracted authors works
     df_oa_retracted_authors_works_sources = df_oa_retracted_authors_works.merge(df_oa_works_sources,
                                                                                 on='work_id',
                                                                                 how='left')
     
+    # now we need to add more identifiers to works
+    df_oa_works_ids = pd.read_csv(OA_WORKS_IDS_PATH)\
+                        .drop(columns=['openalex'])\
+                        .drop_duplicates()
+    
+    # only extracting relevant works
+    df_oa_works_ids = df_oa_works_ids[df_oa_works_ids['work_id'].isin(set_works_for_retracted_authors)]
+
+    # finally merging these ids with df_oa_retracted_authors_works_sources
+    df_oa_retracted_authors_works_sources_ids = df_oa_retracted_authors_works_sources.merge(df_oa_works_ids,
+                                                                                            on='work_id', how='left')
+    
     # saving the file
-    df_oa_retracted_authors_works_sources.to_csv(os.path.join(OUTDIR, "all_OA_works_authorship_sources_forRetractedAuthors.csv"),
-                                                            index=False)
+    df_oa_retracted_authors_works_sources_ids.to_csv(os.path.join(OUTDIR, "all_OA_works_authorship_sources_forRetractedAuthors.csv"),
+                                                                index=False)
 
     # printing for sanity checks
     print("Number of retracted authors:", df_oa_retracted_authors_works_sources['author_id'].nunique(),
