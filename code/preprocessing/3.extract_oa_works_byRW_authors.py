@@ -12,15 +12,9 @@ number of collaborators, and so on.
 """
 
 import pandas as pd
-import configparser
 import os
+from config_reader import read_config
 import gc
-
-def read_config():
-    # preprocessing the config file
-    config = configparser.ConfigParser()
-    config.read('preprocessing_config.ini')
-    return config['Paths']
 
 def main():
     # reading all the relevant paths

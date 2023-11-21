@@ -7,14 +7,8 @@ for authors of retracted papers listed in OpenAlex.
 """
 
 import pandas as pd
-import configparser
 import os
-
-def read_config():
-    # preprocessing the config file
-    config = configparser.ConfigParser()
-    config.read('preprocessing_config.ini')
-    return config['Paths']
+from config_reader import read_config
 
 def main():
     # reading all the relevant paths

@@ -14,14 +14,8 @@ to match and consolidate information from both sources.
 
 
 import pandas as pd
-import configparser
 import os
-
-def read_config():
-    # preprocessing the config file
-    config = configparser.ConfigParser()
-    config.read('preprocessing_config.ini')
-    return config['Paths']
+from config_reader import read_config
 
 def read_csv(file_path, columns):
     # reading only relevant columns

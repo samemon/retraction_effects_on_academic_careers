@@ -12,22 +12,14 @@ this task.
 """
 
 import pandas as pd
-import configparser
 import os
-
-def read_config():
-    # preprocessing the config file
-    config = configparser.ConfigParser()
-    config.read('preprocessing_config.ini')
-    return config['Paths']
+from config_reader import read_config
 
 def main():
     # reading all the relevant paths
     paths = read_config()
     OUTDIR = paths['OUTDIR']
     OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
-    
-    
 
 if __name__ == "__main__":
     main()
