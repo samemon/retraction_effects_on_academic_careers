@@ -114,9 +114,9 @@ def main():
                                                                 index=False)
 
     # printing for sanity checks
-    print("Number of retracted authors:", df_oa_retracted_authors_works_sources['author_id'].nunique(),
-        "Total number of works", df_oa_retracted_authors_works_sources['work_id'].nunique(),
-        "Columns: ", df_oa_retracted_authors_works_sources.columns)
+    print("Number of retracted authors:", df_oa_retracted_authors_works_sources_ids['author_id'].nunique(),
+        "Total number of works", df_oa_retracted_authors_works_sources_ids['work_id'].nunique(),
+        "Columns: ", df_oa_retracted_authors_works_sources_ids.columns)
 
 if __name__ == "__main__":
     main()
