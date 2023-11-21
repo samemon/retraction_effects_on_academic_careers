@@ -35,8 +35,11 @@ def main():
     # reading all the relevant paths
     paths = read_config()
     OUTDIR = paths['OUTDIR_PATH']
+    # Add path to your RW Original dataset
     RW_CSV_PATH = paths['RW_CSV_PATH']
+    # Add path to MAG-merged RW dataset containing MAGPID for each Record
     MAG_RW_CSV_PATH = paths['MAG_RW_CSV_PATH']
+    # Add path to your OpenAlex works_ids.csv.gz file
     OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
 
     # Read datasets

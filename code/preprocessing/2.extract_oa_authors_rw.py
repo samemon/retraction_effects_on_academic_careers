@@ -21,10 +21,14 @@ def main():
     # reading all the relevant paths
     paths = read_config()
     OUTDIR = paths['OUTDIR_PATH']
+    # Add path to OpenAlex works_authorships.csv.gz file
     OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
+    # Add path to your OpenAlex merged RW dataset with OpenAlex work ids
+    # This can be generated from 1.extract_oa_works_rw.py
+    OA_RW_WORK_IDS_PATH = paths['PROCESSED_RETRACTED_WORK_IDS_PATH']
     
     # reading the RW MAG merged file from openAlex
-    df_oa_rw = pd.read_csv(os.path.join(OUTDIR, "works_ids_RW_MAG_OA_merged_sample_BasedOndoi_ORpmid_ORmag.csv"))
+    df_oa_rw = pd.read_csv(OA_RW_WORK_IDS_PATH)
 
     # Reading open alex works authorships file
     df_oa_authors = pd.read_csv(OA_WORKS_AUTHORSHIPS_PATH)
