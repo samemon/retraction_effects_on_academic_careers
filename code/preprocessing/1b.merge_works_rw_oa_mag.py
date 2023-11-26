@@ -41,7 +41,7 @@ def main():
                                     'MAGPID': 'mag'})
     
     # merging based on DOI
-    df_mag_rw_DOI = df_mag_rw2[~df_mag_rw2['doi'].isna() & ~df_mag_rw2['doi'].isin(['unavailable', 'Unavailable']]\
+    df_mag_rw_DOI = df_mag_rw2[~df_mag_rw2['doi'].isna() & ~df_mag_rw2['doi'].isin(['unavailable', 'Unavailable'])]\
                         [['Record ID', 'doi']]\
                         .drop_duplicates()\
                         .merge(df_oa_rw_works, on='doi')
