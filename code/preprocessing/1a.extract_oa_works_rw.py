@@ -40,6 +40,9 @@ def main():
     df_rw = read_csv(RW_CSV_PATH, ['Record ID', 'OriginalPaperDOI', 'OriginalPaperPubMedID'])
     df_mag_rw = read_csv(MAG_RW_CSV_PATH, ['Record ID', 'MAGPID'])
     df_oa = read_csv(OA_WORKS_IDS_PATH, None)  # Read all columns for now
+    
+    # filter openalex column (was added later after creating file from this code)
+    df_oa = df_oa.drop(columns=['openalex'])
 
     # Merge datasets to retain all 3 possible ids
     df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')

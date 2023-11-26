@@ -7,7 +7,7 @@ the first year of publication for each retracted author
 listed in OpenAlex. Academic age is computed as the 
 difference in the number of years between the retraction year 
 and the first publication year. Since an author can have multiple
-retractions, work_id and author_id is used a composite id for 
+retractions, author_id and retraction year are used a composite id for 
 this task.
 """
 

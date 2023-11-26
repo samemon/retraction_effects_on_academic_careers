@@ -110,8 +110,9 @@ def main():
                                                                                             on='work_id', how='left')
     
     # saving the file
-    df_oa_retracted_authors_works_sources_ids.to_csv(os.path.join(OUTDIR, "all_OA_works_authorship_sources_forRetractedAuthors.csv"),
-                                                                index=False)
+    df_oa_retracted_authors_works_sources_ids.to_csv(os.path.join(OUTDIR, 
+                                                    "all_OA_works_authorship_sources_forRetractedAuthors.csv"),
+                                                    index=False)
 
     # printing for sanity checks
     print("Number of retracted authors:", df_oa_retracted_authors_works_sources_ids['author_id'].nunique(),
