@@ -41,17 +41,24 @@ def main():
                                     'MAGPID': 'mag'})
     
     # merging based on DOI
-    df_mag_rw_DOI = df_mag_rw2.merge(df_oa_rw_works, on='doi')
+    df_mag_rw_DOI = df_mag_rw2[['Record ID', 'doi']]\
+                        .drop_duplicates()\
+                        .merge(df_oa_rw_works, on='doi')
     
     # merging based on pubmed id
-    df_mag_rw_PMID = df_mag_rw2.merge(df_oa_rw_works, on='pmid')
+    df_mag_rw_PMID = df_mag_rw2[['Record ID', 'pmid']]\
+                    .drop_duplicates()\
+                    .merge(df_oa_rw_works, on='pmid')
     # filtering those already merged based on DOI
     RIDs_merged_onDOI = df_mag_rw_DOI['Record ID'].unique()
     df_mag_rw_PMID = df_mag_rw_PMID[~df_mag_rw_PMID['Record ID']\
                                     .isin(RIDs_merged_onDOI)]
     
     # merging based on mag id
-    df_mag_rw_MAGPID = df_mag_rw2.merge(df_oa_rw_works, on='mag')
+    df_mag_rw_MAGPID = df_mag_rw2[['Record ID', 'mag']]\
+                            .drop_duplicates()\
+                            .merge(df_oa_rw_works, on='mag')
+    
     # filtering those already merged based on DOI and PMID
     RIDs_merged_onPMID = df_mag_rw_PMID['Record ID'].unique()
     df_mag_rw_MAGPID = df_mag_rw_MAGPID[~df_mag_rw_MAGPID['Record ID']\
