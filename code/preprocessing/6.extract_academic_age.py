@@ -19,6 +19,7 @@ def main():
     # reading all the relevant paths
     paths = read_config()
     OUTDIR = paths['OUTDIR']
+    
     OA_WORKS_AUTHORSHIPS_PATH = paths['OA_WORKS_AUTHORSHIPS_PATH']
 
 if __name__ == "__main__":
