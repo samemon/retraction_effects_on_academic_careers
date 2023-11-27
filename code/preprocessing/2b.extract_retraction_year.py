@@ -32,9 +32,11 @@ def main():
                     .drop_duplicates()
     
     # extracting retraction year
-    df_rw['RetractionYear'] = pd.to_datetime(df_rw['RetractionDate'], 
+    df_rw['RetractionDate'] = pd.to_datetime(df_rw['RetractionDate'], 
                                                 format='%d/%m/%Y %H:%M', 
                                                 errors='coerce')
+    
+    df_rw['RetractionYear'] = df_rw['RetractionDate'].dt.year
     
     # removing retraction date
     df_rw = df_rw.drop(columns=['RetractionDate'])
