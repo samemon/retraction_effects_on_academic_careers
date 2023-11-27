@@ -25,7 +25,7 @@ def main():
     # Add path to author_ids of retracted authors
     PROCESSED_RETRACTED_AUTHOR_IDS_PATH = paths['PROCESSED_RETRACTED_AUTHOR_IDS_PATH']
     # Add path to work_ids of retracted papers
-    PROCESSED_RETRACTED_MERGED_WORK_IDS_PATH = paths['PROCESSED_RETRACTED_AUTHOR_IDS_PATH']
+    PROCESSED_RETRACTED_MERGED_WORK_IDS_PATH = paths['PROCESSED_RETRACTED_MERGED_WORK_IDS_PATH']
     
     # reading retraction watch
     df_rw = pd.read_csv(RW_CSV_PATH, usecols=['Record ID', 'RetractionDate'])\
