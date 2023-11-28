@@ -16,14 +16,7 @@ to match and consolidate information from both sources.
 import pandas as pd
 import os
 from config_reader import read_config
-
-def read_csv(file_path, columns):
-    # reading only relevant columns
-    return pd.read_csv(file_path, usecols=columns).drop_duplicates()
-
-def fix_pmid_column(df):
-    # fixing pmid to remove leading url and retain just the id (to merge)
-    df.loc[:, 'pmid'] = df['pmid'].str.split("/").str[-1]
+from data_utils import read_csv, fix_pmid_column, fix_doi_column
 
 def main():
     # reading all the relevant paths
@@ -47,8 +40,10 @@ def main():
     # Merge datasets to retain all 3 possible ids
     df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')
 
-    # Data processing
+    # Data processing to fix columns
+    
     fix_pmid_column(df_oa)
+    fix_doi_column(df_oa)
 
     # extracting all kinds of relevant IDs
     dois_rw = df_mag_rw[~df_mag_rw['OriginalPaperDOI'].isin(['unavailable', 'Unavailable']) & ~df_mag_rw['OriginalPaperDOI'].isna()]['OriginalPaperDOI'].unique()

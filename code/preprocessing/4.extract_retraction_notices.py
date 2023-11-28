@@ -22,6 +22,7 @@ and remove them whenever computing a confounder.
 import pandas as pd
 import os
 from config_reader import read_config
+from data_utils import read_csv, fix_pmid_column, fix_doi_column
 
 def main():
     # reading all the relevant paths
@@ -30,10 +31,39 @@ def main():
     # Add path to retraction watch original dataset
     RW_CSV_PATH = paths['RW_CSV_PATH']
     # Add path to author_ids of retracted authors
-    PROCESSED_RETRACTED_AUTHOR_IDS_PATH = paths['PROCESSED_RETRACTED_AUTHOR_IDS_PATH']
-    # Add path to work_ids of retracted papers
-    PROCESSED_RETRACTED_MERGED_WORK_IDS_PATH = paths['PROCESSED_RETRACTED_MERGED_WORK_IDS_PATH']
+    PROCESSED_RETRACTION_NOTICES_MAG_PATH = paths['PROCESSED_RETRACTION_NOTICES_MAG_PATH']
+    # Add path to your OpenAlex works_ids.csv.gz file
+    OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
     
+    # reading retraction watch
+    df_rw = pd.read_csv(RW_CSV_PATH)
+    # extracting dois for notes
+    dois_notes = df_rw[~df_rw['RetractionDOI'].isin(['unavailable', 'Unavailable'] & 
+                            ~df_rw['RetractionDOI'.isna() &
+                            ~df_rw['OriginalPaperDOI'].eq(df_rw['RetractionDOI'])]]\
+                            ['RetractionDOI'].unique()
+    
+    # extracting pmids for notes
+    pmids_notes = df_rw[~df_rw['RetractionPubMedID'].eq(0) & 
+                        ~df_rw['RetractionPubMedID'].isna() &
+                        ~df_rw['OriginalPaperPubMedID'].eq(df_rw['RetractionPubMedID'])]\
+                            ['RetractionPubMedID'].unique()
+    
+    # reading retraction notes from MAG
+    magpid_notes = pd.read_csv(PROCESSED_RETRACTION_NOTICES_MAG_PATH)\
+                        ['PID'].unique()
+                        
+    # reading works file from OA
+    df_oa = read_csv(OA_WORKS_IDS_PATH, None)  # Read all columns for now
+    # filter openalex column
+    df_oa = df_oa.drop(columns=['openalex'])
+    
+    # Data processing to fix columns
+    
+    fix_pmid_column(df_oa)
+    fix_doi_column(df_oa)
+    
+    # Now filtering to extract relevant work ids
     
     
 if __name__ == "__main__":
