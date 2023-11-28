@@ -6,7 +6,7 @@
 ##SBATCH -q css
 ##SBATCH -a 1-100
 #SBATCH --mem=1800GB #499GB is max when using condo #119GB doesn't require bigmem
-#SBATCH -t  01:00:00 #times out after 48 hours
+#SBATCH -t  12:00:00 #times out after 48 hours
 #SBATCH -o job.%J.openalex.out  #output file
 #SBATCH -e job.%J.openalex.err  #input file                                                                                                                                
 #SBATCH --mail-type=ALL
@@ -18,3 +18,4 @@
 #python3 2a.extract_oa_authors_rw.py
 python3 2b.extract_retraction_year.py
 #python3 3.extract_oa_works_byRW_authors.py
+#python3 4.extract_retraction_notices.py

@@ -12,10 +12,7 @@ with OA works using the following logic:
 import pandas as pd
 import os
 from config_reader import read_config
-
-def read_csv(file_path, columns):
-    # reading only relevant columns
-    return pd.read_csv(file_path, usecols=columns).drop_duplicates()
+from data_utils import read_csv
 
 def main():
     # reading all the relevant paths

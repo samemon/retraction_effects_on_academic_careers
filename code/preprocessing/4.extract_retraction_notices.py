@@ -38,9 +38,9 @@ def main():
     # reading retraction watch
     df_rw = pd.read_csv(RW_CSV_PATH)
     # extracting dois for notes
-    dois_notes = df_rw[~df_rw['RetractionDOI'].isin(['unavailable', 'Unavailable'] & 
-                            ~df_rw['RetractionDOI'.isna() &
-                            ~df_rw['OriginalPaperDOI'].eq(df_rw['RetractionDOI'])]]\
+    dois_notes = df_rw[~df_rw['RetractionDOI'].isin(['unavailable', 'Unavailable']) & 
+                            ~df_rw['RetractionDOI'].isna() &
+                            ~df_rw['OriginalPaperDOI'].eq(df_rw['RetractionDOI'])]\
                             ['RetractionDOI'].unique()
     
     # extracting pmids for notes
@@ -64,7 +64,11 @@ def main():
     fix_doi_column(df_oa)
     
     # Now filtering to extract relevant work ids
+    df_oa = df_oa[df_oa['mag'].isin(magpid_notes) | df_oa['doi'].isin(dois_notes) | df_oa['pmid'].isin(pmids_notes)]
     
+    # saving
+    df_oa.to_csv(os.path.join(OUTDIR, "retraction_notes_ids_OA.csv"),
+                    index=False)
     
 if __name__ == "__main__":
     main()
