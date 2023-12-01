@@ -64,10 +64,11 @@ def main():
     fix_doi_column(df_oa)
     
     # Now filtering to extract relevant work ids
-    df_oa = df_oa[df_oa['mag'].isin(magpid_notes) | df_oa['doi'].isin(dois_notes) | df_oa['pmid'].isin(pmids_notes)]
-    
+    df_oa = df_oa[df_oa['pmid'].isin(pmids_notes)]
+    #df_oa['mag'].isin(magpid_notes) | | df_oa['pmid'].isin(pmids_notes)
+    #df_oa['doi'].isin(dois_notes) 
     # saving
-    df_oa.to_csv(os.path.join(OUTDIR, "retraction_notes_ids_OA.csv"),
+    df_oa.to_csv(os.path.join(OUTDIR, "retraction_notes_ids_OA_temp_pmid.csv"),
                     index=False)
     
 if __name__ == "__main__":

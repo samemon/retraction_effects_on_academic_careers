@@ -16,6 +16,6 @@
 #python3 1a.extract_oa_works_rw.py
 #python3 1b.merge_works_rw_oa_mag.py
 #python3 2a.extract_oa_authors_rw.py
-python3 2b.extract_retraction_year.py
+#python3 2b.extract_retraction_year.py
 #python3 3.extract_oa_works_byRW_authors.py
-#python3 4.extract_retraction_notices.py
+python3 4.extract_retraction_notices.py
