@@ -18,6 +18,9 @@ __pycache__
 # Ignore all configuration files
 *.ini
 
+# Ignore .txt file
+*.txt
+
 # Ignore the environment and data folder
 retractionEnv/
 data/

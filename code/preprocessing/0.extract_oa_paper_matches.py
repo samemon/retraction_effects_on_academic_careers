@@ -7,11 +7,11 @@ retraction watch papers to the relevant
 papers in OA using fuzzy matching.
 """
 
-
 import pandas as pd
 import os
+import argparse
 from config_reader import read_config
-from data_utils import read_csv, fix_pmid_column, fix_doi_column
+from data_utils import read_csv
 from rapidfuzz import process, fuzz
 
 def find_paper_matches(retracted_papers, path_oa_works, year, nchoices=3):
@@ -28,7 +28,9 @@ def find_paper_matches(retracted_papers, path_oa_works, year, nchoices=3):
     """
     
     
-    df_works = read_csv(path_oa_works, columns=['id','title','publication_year'])
+    df_works = pd.read_csv(path_oa_works, 
+                        usecols=['id','title','publication_year'])
+    
     # extracting relevant works
     df_works['YearDiff'] = df_works['publication_year'] - year
     df_works = df_works[df_works['YearDiff'].isin([-1,0,1])]\
@@ -58,17 +60,51 @@ def find_paper_matches(retracted_papers, path_oa_works, year, nchoices=3):
     
     return pd.DataFrame(lst_matches, columns=columns)
 
-def main():
+def main(year):
     # reading all the relevant paths
     paths = read_config()
-    OUTDIR = paths['OUTDIR_PATH']
+    OUTDIR_FUZZYMATCH_PATH = paths['OUTDIR_FUZZYMATCH_PATH']
     # Add path to your RW Original dataset
     RW_CSV_PATH = paths['RW_CSV_PATH']
-    # Add path to your OpenAlex works_ids.csv.gz file
-    OA_WORKS_IDS_PATH = paths['OA_WORKS_IDS_PATH']
+    # Add path to your OpenAlex works.csv.gz file
+    OA_WORKS_PATH = paths['OA_WORKS_PATH']
     
     # Read datasets
-    df_rw = read_csv(RW_CSV_PATH, ['Title'])
-    df_mag_rw = read_csv(MAG_RW_CSV_PATH, ['Record ID', 'MAGPID'])
-    df_oa = read_csv(OA_WORKS_IDS_PATH, None)  # Read all columns for now
+    df_rw = read_csv(RW_CSV_PATH, ['Title', 'OriginalPaperDate'])\
+                    .drop_duplicates()
     
+    # extracting publication year
+    # some of these will have no publication date as a result of this
+    df_rw['OriginalPaperDate'] = pd.to_datetime(df_rw['OriginalPaperDate'], 
+                                                format='%d/%m/%Y %H:%M', 
+                                                errors='coerce')
+    
+    df_rw['OriginalPaperYear'] = df_rw['OriginalPaperDate'].dt.year
+
+    # filtering
+    df_rw = df_rw[df_rw.OriginalPaperYear.eq(year) | df_rw.OriginalPaperYear.isna()]
+    
+    retracted_papers = df_rw['Title'].unique().tolist()
+    
+    num_retracted_papers = len(retracted_papers)
+    print(f"Number of retracted papers processing in {year}: {num_retracted_papers}")
+    
+    df_matched = find_paper_matches(retracted_papers, OA_WORKS_PATH, year)
+    
+    # Save the relevant data
+    filename = f"works_ids_RW_OA_fuzzymatched_{year}.csv"
+    df_matched.to_csv(os.path.join(OUTDIR_FUZZYMATCH_PATH, filename), index=False)
+    
+    
+if __name__ == "__main__":
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Fuzzy-matching paper titles")
+    
+    # Add command line argument for the year
+    parser.add_argument("--year", type=float, help="Year of publication for retracted papers", required=True)
+
+    # Parse the command line arguments
+    args = parser.parse_args()
+
+    # Call the main function with the parsed year argument
+    main(args.year)
