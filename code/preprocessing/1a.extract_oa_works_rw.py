@@ -37,13 +37,14 @@ def main():
     # filter openalex column (was added later after creating file from this code)
     df_oa = df_oa.drop(columns=['openalex'])
 
-    # Merge datasets to retain all 3 possible ids
-    df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')
-
     # Data processing to fix columns
     
     fix_pmid_column(df_oa)
     fix_doi_column(df_oa)
+
+
+    # Merge datasets to retain all 3 possible ids
+    df_mag_rw = df_rw.merge(df_mag_rw, on='Record ID', how='left')
 
     # extracting all kinds of relevant IDs
     dois_rw = df_mag_rw[~df_mag_rw['OriginalPaperDOI'].isin(['unavailable', 'Unavailable']) & ~df_mag_rw['OriginalPaperDOI'].isna()]['OriginalPaperDOI'].unique()
