@@ -47,6 +47,14 @@ def main():
                                                 4:'MAGTitle',
                                                 7:'MAGPubYear'})
     
+    # dealing with some outliers                            
+    # df_papers['MAGPubYear'] = df_papers['MAGPubYear'].replace("2014-01-29", 2014)
+    # df_papers['MAGPubYear'] = df_papers['MAGPubYear'].replace("2015-10-07", 2015)
+    # df_papers['MAGPubYear'] = df_papers['MAGPubYear'].replace("2005-01-31", 2005)
+    # df_papers['MAGPubYear'] = df_papers['MAGPubYear'].replace("1990-01-31", 1990)
+    
+    df_papers['MAGPubYear'] = pd.to_numeric(df_papers['MAGPubYear'], errors='coerce')
+    
     # Limiting the papers to relevant window
     df_papers = df_papers[df_papers['MAGPubYear'].ge(1989) & 
                         df_papers['MAGPubYear'].le(2016)]
