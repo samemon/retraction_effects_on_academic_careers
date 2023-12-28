@@ -48,11 +48,20 @@ def main():
     
     
     # merging on doi
-    df_merged_doi = df_rw_relevant.merge(df_papers, on='OriginalPaperDOI', 
+    df_merged_doi = df_papers[df_papers['OriginalPaperDOI']\
+            .isin(df_rw_relevant['OriginalPaperDOI'].unique())]
+    
+    df_merged_doi = df_rw_relevant.merge(df_merged_doi, 
+                                            on='OriginalPaperDOI', 
                                             how='inner')
     
     # merging on title
-    df_merged_title = df_rw_relevant.merge(df_papers, left_on='RWTitleNorm', right_on='MAGTitle', 
+    df_merged_title = df_papers[df_papers['MAGTitle']\
+            .isin(df_rw_relevant['RWTitleNorm'].unique())]
+    
+    df_merged_title = df_rw_relevant.merge(df_merged_title, 
+                                            left_on='RWTitleNorm', 
+                                            right_on='MAGTitle', 
                                             how='inner')
     
     # concatenating
