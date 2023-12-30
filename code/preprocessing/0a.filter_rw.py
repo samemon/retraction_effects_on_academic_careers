@@ -54,12 +54,12 @@ def main():
     print(f"Number of retracted papers beyond 1990 and 2015 {num_papers_not_1990_2015}")
 
     # filtering (Note only one paper has NaN retraction year from 1700s)
-    df_rw = df_rw[df_rw['RetractionYear'].ge(1990) & df_rw['RetractionYear'].le(2015)]
+    #df_rw = df_rw[df_rw['RetractionYear'].ge(1990) & df_rw['RetractionYear'].le(2015)]
     
     # Save the relevant data
     
     # We shall save this version of retraction watch to use it for later processing.
-    df_rw.to_csv(os.path.join(INDIR_RW_PATH, "RW_1990_2015.csv"), index=False)
+    df_rw.to_csv(os.path.join(INDIR_RW_PATH, "RW_Original_wYear.csv"), index=False)
     
 if __name__ == "__main__":
     main()

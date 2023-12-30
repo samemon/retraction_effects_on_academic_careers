@@ -27,13 +27,14 @@ def main():
     paths = read_config()
     OUTDIR_FUZZYMATCH_PATH = paths['OUTDIR_FUZZYMATCH_PATH']
     # Add path to your RW Original dataset
-    RW_1990_2015_PATH = paths['RW_1990_2015_PATH']
+    #RW_1990_2015_PATH = paths['RW_1990_2015_PATH']
+    RW_ORIGINAL_W_YEAR_PATH = paths['RW_ORIGINAL_W_YEAR_PATH']
     # Add path to your MAG papers file
     MAG_PAPERS_PATH = paths['MAG_PAPERS_PATH']
     
     # Read datasets
     # Reading retraction watch with the relevant columns only
-    df_rw = pd.read_csv(RW_1990_2015_PATH)
+    df_rw = pd.read_csv(RW_ORIGINAL_W_YEAR_PATH)
     
     # only extracting relevant columns
     df_rw_relevant = df_rw[['Record ID', 'RWTitleNorm', 'OriginalPaperDOI']].drop_duplicates()
@@ -56,8 +57,8 @@ def main():
     df_papers['MAGPubYear'] = pd.to_numeric(df_papers['MAGPubYear'], errors='coerce')
     
     # Limiting the papers to relevant window
-    df_papers = df_papers[df_papers['MAGPubYear'].ge(1989) & 
-                        df_papers['MAGPubYear'].le(2016)]
+    # df_papers = df_papers[df_papers['MAGPubYear'].ge(1989) & 
+    #                     df_papers['MAGPubYear'].le(2016)]
     
     # only extracting non-nan dois
     df_rw_relevant_doi = df_rw_relevant[~df_rw_relevant['OriginalPaperDOI'].isna()]
