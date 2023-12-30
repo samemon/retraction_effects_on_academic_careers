@@ -47,7 +47,7 @@ def find_paper_matches(df_rw_relevant, path_mag_papers, year, nchoices=3):
     df_papers['MAGPubYear'] = pd.to_numeric(df_papers['MAGPubYear'], errors='coerce')
     
     # Limiting the papers to relevant given year
-    df_papers = df_papers[df_papers['MAGPubYear'] == year]
+    df_papers = df_papers[df_papers['MAGPubYear'].eq(year-1) | df_papers['MAGPubYear'].eq(year+1)]
     
     # reseting index so we can track the id's later
     df_papers = df_papers.reset_index(drop=True)
@@ -118,7 +118,7 @@ def main(year):
     print(f"Number of records matched based on fuzzy title in exact year {year} : {num_papers_matched}")
     
     # Save the relevant data
-    filename = f"RW_MAG_fuzzy_paper_exact_year_matched_{year}.csv"
+    filename = f"RW_MAG_fuzzy_paper_flex_year_matched_{year}.csv"
     df_matched.to_csv(os.path.join(OUTDIR_FUZZYMATCH_PATH, filename), index=False)
     
     
