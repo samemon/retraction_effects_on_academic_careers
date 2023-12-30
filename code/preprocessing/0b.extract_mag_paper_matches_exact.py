@@ -76,12 +76,14 @@ def main():
     
     # merging on title
     df_merged_title = df_papers[df_papers['MAGTitle']\
-            .isin(df_rw_relevant['RWTitleNorm'].unique())]
+            .isin(df_rw_relevant['RWTitleNorm'].unique())]\
+                    .drop(columns=['OriginalPaperDOI'])
     
     df_merged_title = df_rw_relevant.merge(df_merged_title, 
                                             left_on='RWTitleNorm', 
                                             right_on='MAGTitle', 
-                                            how='inner')
+                                            how='inner')\
+                                                .drop(columns=['OriginalPaperDOI'])
     
     # removing records merged on doi
     df_merged_title = df_merged_title[~df_merged_title['Record ID']\

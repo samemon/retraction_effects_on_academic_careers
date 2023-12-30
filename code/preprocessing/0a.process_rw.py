@@ -2,8 +2,8 @@
 
 """
 Summary:
-The Python program will be used to filter 
-the irrelevant records from retraction watch
+The Python program will be used to preprocess
+retraction watch before using it for fuzzy match
 """
 
 import pandas as pd
