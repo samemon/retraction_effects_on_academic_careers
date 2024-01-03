@@ -70,6 +70,8 @@ def main():
     print("Printing distribution of those missing by DocType Top 30")
     print(df_papers_not_in_oa['MAGDocType'].value_counts().head(30))
     
+    df_papers_not_in_oa = df_papers_not_in_oa[df_papers_not_in_oa['MAGDocType'] != 'Patent']
+    
     print("Printing distribution of those missing by year Top 30")
     print(df_papers_not_in_oa['MAGPubYear'].value_counts().head(30))
     
@@ -94,6 +96,8 @@ def main():
     # Now let us check the doc type of those and from which years are they
     print("Printing distribution of those missing by DocType Top 30")
     print(df_papers_not_in_oa['MAGDocType'].value_counts().head(30))
+    
+    df_papers_not_in_oa = df_papers_not_in_oa[df_papers_not_in_oa['MAGDocType'] != 'Patent']
     
     print("Printing distribution of those missing by year Top 30")
     print(df_papers_not_in_oa['MAGPubYear'].value_counts().head(30))

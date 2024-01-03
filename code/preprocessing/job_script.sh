@@ -4,15 +4,15 @@
 ##SBATCH -p compute
 #SBATCH -n 1
 #SBATCH -q css
-#SBATCH -a 1-47
+#SBATCH -a 1-12
 #SBATCH --mem=480GB #499GB is max when using condo #119GB doesn't require bigmem
-#SBATCH -t  48:00:00 #times out after 48 hours
-#SBATCH -o job.%J.fuzzymatchingFlexYear.out  #output file
-#SBATCH -e job.%J.fuzzymatchingFlexYear.err  #input file                                                                                                                                
+#SBATCH -t  168:00:00 #times out after 48 hours
+#SBATCH -o job.%J.fuzzymatching.out  #output file
+#SBATCH -e job.%J.fuzzymatching.err  #input file                                                                                                                                
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=sm9654@nyu.edu
 
-srun $(head -n $SLURM_ARRAY_TASK_ID jobs.txt | tail -n 1)
+srun $(head -n $SLURM_ARRAY_TASK_ID jobs_od.txt | tail -n 1)
 #python3 0a.process_rw.py
 #python3 0b.extract_mag_paper_matches_exact.py
 #python3 0c.extract_mag_paper_matches_fuzzyTitle_exactYear.py --year 1926

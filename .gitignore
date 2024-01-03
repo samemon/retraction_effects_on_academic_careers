@@ -24,5 +24,4 @@ __pycache__
 # Ignore the environment and data folder
 retractionEnv/
 data/
-
-
+openAlex_exploration/
