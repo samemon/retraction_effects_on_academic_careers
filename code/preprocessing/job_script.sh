@@ -5,7 +5,7 @@
 #SBATCH -n 1
 #SBATCH -q css
 #SBATCH -a 1-12
-#SBATCH --mem=485GB #499GB is max when using condo #119GB doesn't require bigmem
+#SBATCH --mem=480GB #499GB is max when using condo #119GB doesn't require bigmem
 #SBATCH -t  168:00:00 #times out after 48 hours
 #SBATCH -o job.%J.fuzzymatching.out  #output file
 #SBATCH -e job.%J.fuzzymatching.err  #input file                                                                                                                                
