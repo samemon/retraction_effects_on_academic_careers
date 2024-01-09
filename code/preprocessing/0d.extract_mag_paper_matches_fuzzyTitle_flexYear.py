@@ -22,6 +22,7 @@ import argparse
 from config_reader import read_config
 from data_utils import read_csv
 from rapidfuzz import process, fuzz
+import numpy as np
 
 def find_paper_matches(df_rw_relevant, path_mag_papers, year, nchoices=3):
     """This function will find string matches for retracted paper 
@@ -145,7 +146,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # print year for tracking
-    print(args.year)
+    print(args.year, args.splits, args.n)
     
     # Call the main function with the parsed year argument
     main(args.year, args.splits, args.n)
