@@ -140,8 +140,8 @@ if __name__ == "__main__":
     
     # Add command line argument for the year
     parser.add_argument("--year", type=float, help="Year of publication for retracted papers", required=True)
-    parser.add_argument("--splits", type=str, help="number of splits", required=False, default=1)
-    parser.add_argument("--n", type=str, help="which split is the current one", required=False, default=0)
+    parser.add_argument("--splits", type=int, help="number of splits", required=False, default=1)
+    parser.add_argument("--n", type=int, help="which split is the current one", required=False, default=0)
     # Parse the command line arguments
     args = parser.parse_args()
 
