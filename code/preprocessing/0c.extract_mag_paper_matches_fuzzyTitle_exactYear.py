@@ -81,7 +81,7 @@ def find_paper_matches(df_rw_relevant, path_mag_papers, year, nchoices=3):
     
     return df_matched
 
-def main(year):
+def main(year, n_splits, n):
     # reading all the relevant paths
     paths = read_config()
     OUTDIR_FUZZYMATCH_PATH = paths['OUTDIR_FUZZYMATCH_PATH']
@@ -104,9 +104,15 @@ def main(year):
     df_rw = df_rw[~df_rw['Record ID'].isin(lst_rw_exact_matched)]
     # Removing records that were published in the year other than given year
     df_rw = df_rw[df_rw['OriginalPaperYear'] == year]
+    # Sorting by record ids
+    df_rw = df_rw.sort_values(by='Record ID')
+    # Splitting into n 
+    split_dfs = np.array_split(df_rw, n_splits)
+    # Extracting the nth split
+    df_rw = split_dfs[n]
     
     num_records_RW = df_rw['Record ID'].nunique()
-    print(f"Number of records in RW published in {year}: {num_records_RW}")
+    print(f"Number of records in RW published in {year} in split {n}: {num_records_RW}")
     
     # only extracting relevant columns
     df_rw_relevant = df_rw[['Record ID', 'RWTitleNorm']].drop_duplicates()
@@ -115,10 +121,14 @@ def main(year):
     
     # Identifying number of records matched with > 90 score
     num_papers_matched = df_matched['Record ID'].nunique()
-    print(f"Number of records matched based on fuzzy title in exact year {year} : {num_papers_matched}")
+    print(f"Number of records matched based on fuzzy title in exact year {year} in split {n}: {num_papers_matched}")
     
     # Save the relevant data
-    filename = f"RW_MAG_fuzzy_paper_exact_year_matched_{year}.csv"
+    filename = f"RW_MAG_fuzzy_paper_exact_year_matched_{year}"
+    if(n_splits > 1):
+        filename = f"{filename}_{n}.csv"
+    else:
+        filename = f"{filename}.csv"
     df_matched.to_csv(os.path.join(OUTDIR_FUZZYMATCH_PATH, filename), index=False)
     
     
@@ -129,7 +139,8 @@ if __name__ == "__main__":
     
     # Add command line argument for the year
     parser.add_argument("--year", type=float, help="Year of publication for retracted papers", required=True)
-
+    parser.add_argument("--splits", type=str, help="number of splits", required=False, default=1)
+    parser.add_argument("--n", type=str, help="which split is the current one", required=False, default=0)
     # Parse the command line arguments
     args = parser.parse_args()
 
@@ -137,4 +148,4 @@ if __name__ == "__main__":
     print(args.year)
     
     # Call the main function with the parsed year argument
-    main(args.year)
+    main(args.year, args.splits, args.n)
