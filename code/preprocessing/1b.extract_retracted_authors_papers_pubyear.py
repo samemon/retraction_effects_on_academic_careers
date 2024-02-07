@@ -25,8 +25,7 @@ following columns:
     - MAGAffID
     - MAGAuthorOrder
     - MAGPubYear
-    - MAGFirstName
-    - MAGLastName
+    - MAGAuthorName
     - Record ID
     - RetractionYear
     - RetractedPaperMAGPID
@@ -55,7 +54,7 @@ def main():
     # Reading retraction watch with the relevant columns only
     df_mag_rw_papers = pd.read_csv(PROCESSED_RW_MAG_FINAL_PAPER_MATCHES,
                                 usecols=['Record ID', 'MAGPID', 'RetractionYear'])\
-                                .rename(columns={'MAGPID':'RetractedPaperMAGPID'})
+                                .rename(columns={'MAGPID':'RetractedPaperMAGPID'})\
                                 .drop_duplicates() # there should be none though
     
     # reading the MAG paper_author_affiliation file
