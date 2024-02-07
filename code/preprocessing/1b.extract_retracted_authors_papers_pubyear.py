@@ -20,6 +20,7 @@ of each author.
 5. Finally we shall save a dataframe with the 
 following columns:
     - MAGPID
+    - MAGTitle
     - MAGAID
     - MAGAffID
     - MAGAuthorOrder
@@ -54,11 +55,12 @@ def main():
     # Reading retraction watch with the relevant columns only
     df_mag_rw_papers = pd.read_csv(PROCESSED_RW_MAG_FINAL_PAPER_MATCHES,
                                 usecols=['Record ID', 'MAGPID', 'RetractionYear'])\
+                                .rename(columns={'MAGPID':'RetractedPaperMAGPID'})
                                 .drop_duplicates() # there should be none though
     
     # reading the MAG paper_author_affiliation file
     # we will read four columns: paper ids, author ids, affiliations, and author seq
-    df_paper_authors_aff = pd.read_csv(MAG_PAPER_AUTHOR_AFF_PATH, sep="\t", header=None, 
+    df_papers_authors_aff = pd.read_csv(MAG_PAPER_AUTHOR_AFF_PATH, sep="\t", header=None, 
                             usecols=[0,1,2,3])\
                                 .rename(columns={0:'MAGPID',
                                                 1:'MAGAID',
@@ -67,11 +69,62 @@ def main():
                                 .drop_duplicates()
     
     # Let us first extract retracted authors
+    df_retracted_authors = df_papers_authors_aff[df_papers_authors_aff['MAGPID']\
+                                            .isin(df_mag_rw_papers['RetractedPaperMAGPID'])]
     
     
+    # Let us merge it with the retraction watch columns
+    df_retracted_authors = df_retracted_authors.merge(df_mag_rw_papers, 
+                                                    left_on='MAGPID', right_on='RetractedPaperMAGPID',
+                                                    how='right')
     
+    # Only keeping useful columns
+    df_retracted_authors = df_retracted_authors[['MAGAID','Record ID', 
+                                                'RetractedPaperMAGPID', 'RetractionYear']]
+        
+    # Now let us extract all their papers
+    # This df contains: MAGPID, MAGAID, MAGAffID, MAGAuthorOrder
+    # We shall merge it later with others
+    df_retracted_authors_papers = df_papers_authors_aff[df_papers_authors_aff['MAGAID']\
+                                            .isin(df_retracted_authors['MAGAID'])]
+    
+    del df_papers_authors_aff # make some space
+    
+    # Now that we have all the papers, let us extract pub year
+    # reading the MAG papers.txt
+    df_papers = pd.read_csv(MAG_PAPERS_PATH, sep="\t", header=None, 
+                            usecols=[0,4,7])\
+                                .rename(columns={0:'MAGPID',
+                                                4:'MAGTitle',
+                                                7:'MAGPubYear'})\
+                                .drop_duplicates()
+    
+    # This df contains MAGPID, MAGTitle, MAGPubYear
+    # We shall merge this later
+    df_paper_pubyear = df_papers[df_papers['MAGPID'].isin(df_retracted_authors_papers['MAGPID'])]
+    
+    del df_papers
+    # Now we extract the author names
+    # reading the MAG authors.txt
+    df_authors = pd.read_csv(MAG_AUTHORS_PATH, sep="\t", header=None, 
+                            usecols=[0,2])\
+                                .rename(columns={0:'MAGAID',
+                                                2:'MAGAuthorName'})\
+                                .drop_duplicates()
+    # This dataframe contains MAGAID, MAGAuthorName
+    # We shall merge this later                            
+    df_author_names = df_authors[df_authors['MAGAID'].isin(df_retracted_authors['MAGAID'])]
+    
+    del df_authors
+    
+    # MERGING STEP
+    df_merged = df_retracted_authors_papers\
+                    .merge(df_paper_pubyear, on='MAGPID')\
+                    .merge(df_author_names, on='MAGAID')\
+                    .merge(df_retracted_authors, on='MAGAID', how='right')
+                        
     # Save the relevant data
-    df.to_csv(os.path.join(OUTDIR_PATH, "Retracted_Authors_PubHistories.csv"), 
+    df_merged.to_csv(os.path.join(OUTDIR_PATH, "Retracted_Authors_PubHistories.csv"), 
                         index=False)
     
     
