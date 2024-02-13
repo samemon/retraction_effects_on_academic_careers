@@ -74,8 +74,7 @@ def main():
     
     # Let us merge it with the retraction watch columns
     df_retracted_authors = df_retracted_authors.merge(df_mag_rw_papers, 
-                                                    left_on='MAGPID', right_on='RetractedPaperMAGPID',
-                                                    how='right')
+                                                    left_on='MAGPID', right_on='RetractedPaperMAGPID')
     
     # Only keeping useful columns
     df_retracted_authors = df_retracted_authors[['MAGAID','Record ID', 
@@ -117,15 +116,17 @@ def main():
     del df_authors
     
     # MERGING STEP
-    df_merged = df_retracted_authors_papers\
-                    .merge(df_paper_pubyear, on='MAGPID')\
-                    .merge(df_author_names, on='MAGAID')\
-                    .merge(df_retracted_authors, on='MAGAID', how='right')
+    df_merged1 = df_retracted_authors_papers\
+                    .merge(df_paper_pubyear, on='MAGPID', how='left')
+                    
+    df_merged2 = df_merged1.merge(df_author_names, on='MAGAID', how='left')\
+    
+    df_merged3 = df_merged2.merge(df_retracted_authors, on='MAGAID')\
+                    .drop_duplicates()
                         
     # Save the relevant data
-    df_merged.to_csv(os.path.join(OUTDIR_PATH, "Retracted_Authors_PubHistories.csv"), 
+    df_merged3.to_csv(os.path.join(OUTDIR_PATH, "Retracted_Authors_PubHistories.csv"), 
                         index=False)
-    
     
 if __name__ == "__main__":
     main()
