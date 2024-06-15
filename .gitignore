@@ -21,7 +21,12 @@ __pycache__
 # Ignore .txt file
 *.txt
 
+# ignore dstore and notebook checkpoints
+.ipynb_checkpoints/
+.DS_Store
+
 # Ignore the environment and data folder
 retractionEnv/
 data/
 openAlex_exploration/
+old_code/
