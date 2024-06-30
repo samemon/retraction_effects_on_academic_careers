@@ -7,7 +7,10 @@ This repository contains data and code created for the study on "Characterizing 
 
 **code/** folder contains all the code used to create the main and supplementary analysis, tables, and plots.
 
-**plot_data/** folder contains all the data used to create the plots and tables. The data file for 9.altmetric_exploration_plots_altmetric_api_rematching.ipynb is not provided as our data user agreement with Altmetric prevents us from sharing this data.
+**plot_data/** folder contains all the data used to create the plots and tables. 
+
+Note1: The data file for 9.altmetric_exploration_plots_altmetric_api_rematching.ipynb is not provided as our data user agreement with Altmetric prevents us from sharing this data.
+Note2: The data file for 5.collaborator_geo_analysis.ipynb is not provided as it is > 2gb in size and github has a data limitation of 50 MB. However, this file is available on request.
 
 **plots/** folder contains all the plots that are part of our paper.
 
