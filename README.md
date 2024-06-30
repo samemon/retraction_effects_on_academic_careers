@@ -5,11 +5,11 @@
 
 This repository contains data and code created for the study on "Characterizing the effect of retractions on scientific publihsing careers."
 
-code/ folder contains all the code used to create the main and supplementary analysis, tables, and plots.
+**code/** folder contains all the code used to create the main and supplementary analysis, tables, and plots.
 
-plot_data/ folder contains all the data used to create the plots and tables. The data file for 9.altmetric_exploration_plots_altmetric_api_rematching.ipynb is not provided as our data user agreement with Altmetric prevents us from sharing this data.
+**plot_data/** folder contains all the data used to create the plots and tables. The data file for 9.altmetric_exploration_plots_altmetric_api_rematching.ipynb is not provided as our data user agreement with Altmetric prevents us from sharing this data.
 
-plots/ folder contains all the plots that are part of our paper.
+**plots/** folder contains all the plots that are part of our paper.
 
 ## Contributors
 - [Shahan Ali Memon](samemon@uw.edu)
