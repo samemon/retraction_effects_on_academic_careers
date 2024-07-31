@@ -13,6 +13,42 @@ This repository contains data and code created for the study on "Characterizing 
 
 - **plots/** folder contains all the plots that are part of our paper.
 
+# System Requirements
+## Hardware requirements
+The code provided is for reproducing the plots and tables related to the quantitative results and analysis in the paper. It requires only a standard computer or laptop with enough RAM to support the in-memory operations.
+This code was tested on the MacBook Pro (16-inch, 2019) with memory 32 GB 2667 MHz DDR4 and processor 2.4 GHz 8-Core Intel Core i9.
+
+## Software requirements
+### OS Requirements
+The code should work on any operating system as long as Python, R, and Jupyter are installed. This was tested on macOS Monterey.
+
+### Python Dependencies
+```
+pandas==2.0.3
+matplotlib==3.4.1
+Cython==0.29.32
+seaborn==0.11.0
+scipy==1.6.3
+numpy==1.20.3
+geopy==2.4.1
+ptitprince==0.2.7
+```
+
+### R Dependencies
+
+```
+library("survival")
+library("survminer")
+```
+
+# Installation Guide:
+
+All packages can be installed using Pypi
+
+# Demo
+
+This code simply reproduces all the figures and tables in the paper. All the code is in the form of notebooks. For the cells, the output tables and plots are shown in the notebooks.
+
 ## Contributors
 - [Shahan Ali Memon](samemon@uw.edu)
 - [Bedoor AlShebli](bedoor@nyu.edu)
